@@ -1,9 +1,9 @@
-defmodule BarebonesWebServer.MixProject do
+defmodule Barebones.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :barebones_web_server,
+      app: :barebones,
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,

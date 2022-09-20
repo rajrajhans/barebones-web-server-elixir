@@ -4,6 +4,8 @@
 # If you run "mix test --cover", coverage assets end up here.
 /cover/
 
+/.idea/
+
 # The directory Mix downloads your dependencies sources to.
 /deps/
 
@@ -21,6 +23,7 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 barebones_web_server-*.tar
+barebones-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
