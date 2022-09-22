@@ -1,5 +1,10 @@
 defmodule Barebones.RequestMap do
-  defstruct method: "", path: "", resp_body: "", status: nil, params: {}
+  defstruct method: "",
+            path: "",
+            resp_body: "",
+            status: nil,
+            params: {},
+            headers: {}
 
   def make_status(%{status: status}=requestMap) do
     "#{status} #{status_reason(status)}"
