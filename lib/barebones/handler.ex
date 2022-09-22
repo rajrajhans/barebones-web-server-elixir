@@ -76,7 +76,7 @@ Accept: */*
 """
 
 request = """
-GET /bear/912873 HTTP/1.1
+GET /bear/2 HTTP/1.1
 Host: example.in
 User-Agent: HelloElixir/1.1
 Content-Type: application/x-www-form-urlencoded
