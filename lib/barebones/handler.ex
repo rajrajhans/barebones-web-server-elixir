@@ -23,6 +23,10 @@ defmodule Barebones.Handler do
     %RequestMap{requestMap | resp_body: "Bears, Beets, Battlestar Galactica", status: 200}
   end
 
+  def route(requestMap, "POST", "/hello") do
+    %RequestMap{requestMap | resp_body: "Hello, #{requestMap.params["name"]}, the #{requestMap.params["type"]}", status: 200}
+  end
+
   def route(requestMap, "GET", "/hey") do
     %RequestMap{requestMap | resp_body: "Beers, Beefs, Star Wards", status: 200}
   end
@@ -54,12 +58,22 @@ defmodule Barebones.Handler do
   end
 end
 
-request = """
+request_get = """
 GET /about HTTP/1.1
 Host: example.in
 User-Agent: HelloElixir/1.1
 Accept: */*
 
+"""
+
+request = """
+POST /hello HTTP/1.1
+Host: example.in
+User-Agent: HelloElixir/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+
+type=Engineer&name=Zed&age=123
 """
 
 response = Barebones.Handler.handler(request)
