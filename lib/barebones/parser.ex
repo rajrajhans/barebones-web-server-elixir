@@ -7,7 +7,7 @@ defmodule Barebones.Parser do
       |> List.first()
       |> String.split(" ")
 
-    %{
+    %Barebones.RequestMap{
       method: method,
       path: path,
       resp_body: "",
