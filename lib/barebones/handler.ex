@@ -2,6 +2,7 @@ defmodule Barebones.Handler do
   def handler(request) do
     request
     |> parse
+    |> rewrite_path
     |> log
     |> route
     |> format_response
@@ -25,6 +26,12 @@ defmodule Barebones.Handler do
     }
   end
 
+  def rewrite_path( %{path: "/adds"<>num} = requestMap) do
+    %{requestMap | path: "/add"<>num}
+  end
+
+  def rewrite_path(requestMap), do: requestMap
+
   def route(requestMap) do
     route(requestMap, requestMap.method, requestMap.path)
   end
@@ -39,6 +46,14 @@ defmodule Barebones.Handler do
 
   def route(requestMap, "GET", "/add/" <> num1  ) do
     %{requestMap | resp_body: "Hear, ye #{String.to_integer(num1)+2}", status: 200}
+  end
+
+  def route(requestMap, "GET", "/about") do
+    case File.read(Path.expand("../../pages", __DIR__) |> Path.join("about.html")) do
+      {:ok, content} -> %{requestMap | resp_body: content, status: 200}
+      {:error, :enoent} -> %{requestMap | resp_body: "File not found ", status: 404}
+      {:error, reason} -> %{requestMap | resp_body: "File error: #{reason}", status: 500}
+    end
   end
 
   def route(requestMap, _method, path) do
@@ -68,7 +83,7 @@ defmodule Barebones.Handler do
 end
 
 request = """
-GET /add/2 HTTP/1.1
+GET /about HTTP/1.1
 Host: example.in
 User-Agent: HelloElixir/1.1
 Accept: */*
