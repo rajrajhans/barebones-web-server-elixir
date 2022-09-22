@@ -1,4 +1,8 @@
 defmodule Barebones.Handler do
+  @moduledoc "Handles HTTP requests."
+  @pages_path Path.expand("../../pages", __DIR__)
+
+  @doc "main handler function"
   def handler(request) do
     request
     |> parse
@@ -49,7 +53,7 @@ defmodule Barebones.Handler do
   end
 
   def route(requestMap, "GET", "/about") do
-    case File.read(Path.expand("../../pages", __DIR__) |> Path.join("about.html")) do
+    case File.read(@pages_path |> Path.join("about.html")) do
       {:ok, content} -> %{requestMap | resp_body: content, status: 200}
       {:error, :enoent} -> %{requestMap | resp_body: "File not found ", status: 404}
       {:error, reason} -> %{requestMap | resp_body: "File error: #{reason}", status: 500}
