@@ -1,6 +1,8 @@
 defmodule Barebones.Handler do
   @moduledoc "Handles HTTP requests."
   @pages_path Path.expand("../../pages", __DIR__)
+  import Barebones.Plugins, only: [rewrite_path: 1, log: 1]
+  import Barebones.Parser, only: [parse: 1]
 
   @doc "main handler function"
   def handler(request) do
@@ -11,30 +13,6 @@ defmodule Barebones.Handler do
     |> route
     |> format_response
   end
-
-  def log(request), do: IO.inspect(request)
-
-  def parse(request) do
-    [method, path, _] =
-      request
-      |> String.split("\n")
-      |> Enum.map(fn x -> String.trim(x) end)
-      |> List.first()
-      |> String.split(" ")
-
-    %{
-      method: method,
-      path: path,
-      resp_body: "",
-      status: ""
-    }
-  end
-
-  def rewrite_path( %{path: "/adds"<>num} = requestMap) do
-    %{requestMap | path: "/add"<>num}
-  end
-
-  def rewrite_path(requestMap), do: requestMap
 
   def route(requestMap) do
     route(requestMap, requestMap.method, requestMap.path)
