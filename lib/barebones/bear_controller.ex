@@ -4,13 +4,23 @@ defmodule Barebones.BearController do
   alias Barebones.BearData
 
   def index(requestMap) do
-    bears = BearData .list_bears()
-    # todo -> return html from this list of bears
+    bears = BearData.list_bears()
+    html = "<ul>" <> Enum.reduce(bears, "", fn bear, acc -> acc <> "<li>#{bear.name}</li>" end) <> "</ul>"
+
+    %{requestMap |
+      status: 200,
+      resp_body: html
+    }
   end
 
-  def get_bear(requestMap, %{"id" => id}) do
-    %{requestMap | status: 200, resp_body: "Bear #{id}}"}
-    # todo -> send back the bear details with id = id
+  def get_bear(requestMap, id) do
+    bear = BearData.find_bear(id)
+
+    if bear do
+      %{requestMap | status: 200, resp_body: "Bear #{id} is <h1>#{bear.name}</h1>, and is a #{bear.type} bear"}
+    else
+      %{requestMap | status: 404, resp_body: "Could not find bear"}
+    end
   end
 
   def create(requestMap, %{"name" => name, "type" => type}) do

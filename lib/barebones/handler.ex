@@ -4,6 +4,7 @@ defmodule Barebones.Handler do
   import Barebones.Plugins, only: [rewrite_path: 1, log: 1]
   import Barebones.Parser, only: [parse: 1]
   alias Barebones.RequestMap
+  alias Barebones.BearController
 
   @doc "main handler function"
   def handler(request) do
@@ -28,11 +29,19 @@ defmodule Barebones.Handler do
   end
 
   def route(requestMap, "GET", "/hey") do
-    %RequestMap{requestMap | resp_body: "Beers, Beefs, Star Wards", status: 200}
+    %RequestMap{requestMap | resp_body: "Beers, Beets, Star Wars", status: 200}
   end
 
   def route(requestMap, "GET", "/add/" <> num1  ) do
     %RequestMap{requestMap | resp_body: "Hear, ye #{String.to_integer(num1)+2}", status: 200}
+  end
+
+  def route(requestMap, "GET", "/bear") do
+    BearController.index(requestMap)
+  end
+
+  def route(requestMap, "GET", "/bear/" <> id) do
+    BearController.get_bear(requestMap, id)
   end
 
   def route(requestMap, "GET", "/about") do
@@ -67,7 +76,7 @@ Accept: */*
 """
 
 request = """
-GET /bear HTTP/1.1
+GET /bear/912873 HTTP/1.1
 Host: example.in
 User-Agent: HelloElixir/1.1
 Content-Type: application/x-www-form-urlencoded
