@@ -4,8 +4,8 @@ defmodule Barebones.Parser do
     [request_line | header_lines] = String.split(top, "\n")
     [method, path, _] = String.split(request_line, " ")
 
-    params = parse_params(params_string)
     headers = parse_headers(header_lines)
+    params = parse_params(headers["Content-Type"], params_string)
 
     %Barebones.RequestMap{
       method: method,
@@ -17,8 +17,13 @@ defmodule Barebones.Parser do
     }
   end
 
-  def parse_params(params_string) do
+  def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
+  end
+
+  def parse_params(_, _) do
+    IO.puts("Unsupported Content Type")
+    %{}
   end
 
   def parse_headers(list) do
