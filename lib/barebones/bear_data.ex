@@ -1,0 +1,21 @@
+defmodule Barebones.BearData do
+  @moduledoc "module for handling the data for Bears"
+
+  alias Barebones.Bear
+
+  def list_bears do
+    [
+      %Bear{id: 1, name: "Teddy", type: "Brown", is_hibernating: true},
+      %Bear{id: 2, name: "Smokey", type: "Black"},
+      %Bear{id: 3, name: "Paddington", type: "Brown"},
+      %Bear{id: 4, name: "Scarface", type: "Grizzly", is_hibernating: true},
+      %Bear{id: 5, name: "Snow", type: "Polar"},
+      %Bear{id: 6, name: "Brutus", type: "Grizzly"},
+      %Bear{id: 7, name: "Rosie", type: "Black", is_hibernating: true},
+      %Bear{id: 8, name: "Roscoe", type: "Panda"},
+      %Bear{id: 9, name: "Iceman", type: "Polar", is_hibernating: true},
+      %Bear{id: 10, name: "Kenai", type: "Grizzly"}
+    ]
+  end
+  
+end
