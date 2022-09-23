@@ -1,0 +1,11 @@
+<h1>Show Bear</h1>
+
+<p>
+    Bear ID: <%= bear.id %>
+</p>
+<p>
+    Bear Name: <%= bear.name %>
+</p>
+<p>
+    Bear Is Hibernating: <%= bear.is_hibernating %>
+</p>

@@ -2,10 +2,11 @@ defmodule Barebones.BearController do
   @moduledoc "Module to handle the example 'Bear' resource"
 
   alias Barebones.BearData
+  @templates_path Path.expand("../../templates", __DIR__)
 
   def index(requestMap) do
     bears = BearData.list_bears()
-    html = "<ul>" <> Enum.reduce(bears, "", fn bear, acc -> acc <> "<li>#{bear.name}</li>" end) <> "</ul>"
+    html = @templates_path |> Path.join("index.eex") |> EEx.eval_file(bears: bears)
 
     %{requestMap |
       status: 200,
@@ -17,9 +18,12 @@ defmodule Barebones.BearController do
     bear = BearData.find_bear(id)
 
     if bear do
-      %{requestMap | status: 200, resp_body: "Bear #{id} is <h1>#{bear.name}</h1>, and is a #{bear.type} bear"}
+      %{requestMap |
+        status: 200,
+        resp_body: @templates_path |> Path.join("show.eex") |> EEx.eval_file(bear: bear)
+      }
     else
-      %{requestMap | status: 404, resp_body: "Could not find bear"}
+      %{requestMap | status: 404, resp_body: "<h1>Could not find bear</h1>"}
     end
   end
 
