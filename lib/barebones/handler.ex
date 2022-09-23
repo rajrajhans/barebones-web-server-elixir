@@ -58,32 +58,11 @@ defmodule Barebones.Handler do
 
   def format_response(requestMap) do
     """
-      HTTP/1.1 #{RequestMap.make_status(requestMap)}
-      Content-Type: text/html
-      Content-Length: #{String.length(requestMap.resp_body)}
-
-      #{requestMap.resp_body}
+    HTTP/1.1 #{RequestMap.make_status(requestMap)}\r
+    Content-Type: text/html\r
+    Content-Length: #{String.length(requestMap.resp_body)}\r
+    \r
+    #{requestMap.resp_body}
     """
   end
 end
-
-request_get = """
-GET /about HTTP/1.1
-Host: example.in
-User-Agent: HelloElixir/1.1
-Accept: */*
-
-"""
-
-request = """
-GET /bear HTTP/1.1
-Host: example.in
-User-Agent: HelloElixir/1.1
-Content-Type: application/x-www-form-urlencoded
-Accept: */*
-
-type=Engineer&name=Zed&age=123
-"""
-
-response = Barebones.Handler.handler(request)
-IO.puts(response)
