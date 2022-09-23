@@ -4,7 +4,8 @@ defmodule Barebones.RequestMap do
             resp_body: "",
             status: nil,
             params: {},
-            headers: {}
+            headers: {},
+            resp_content_type: "text/html"
 
   def make_status(%{status: status}=requestMap) do
     "#{status} #{status_reason(status)}"

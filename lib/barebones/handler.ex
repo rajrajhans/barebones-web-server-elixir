@@ -40,6 +40,10 @@ defmodule Barebones.Handler do
     BearController.index(requestMap)
   end
 
+  def route(requestMap, "GET", "/api/bears") do
+    Barebones.Api.BearController.index(requestMap)
+  end
+
   def route(requestMap, "GET", "/bear/" <> id) do
     BearController.get_bear(requestMap, id)
   end
@@ -59,7 +63,7 @@ defmodule Barebones.Handler do
   def format_response(requestMap) do
     """
     HTTP/1.1 #{RequestMap.make_status(requestMap)}\r
-    Content-Type: text/html\r
+    Content-Type: #{requestMap.resp_content_type}\r
     Content-Length: #{String.length(requestMap.resp_body)}\r
     \r
     #{requestMap.resp_body}
