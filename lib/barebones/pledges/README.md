@@ -7,4 +7,6 @@
   created.
     - The last three pledges need to be stored in an **in memory cache** in the process.
 
-![](diagram.png) 
+![](diagram.png)
+
+For the implementation of this, check [PledgeServer.ex](PledgeServer.ex)
