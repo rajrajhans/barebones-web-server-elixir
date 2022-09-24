@@ -33,6 +33,12 @@ defmodule Barebones.BearData do
     System.unique_integer([:positive])
   end
 
+  # function that waits 500 milliseconds and replies
+  def get_bear_snapshot() do
+    :timer.sleep(500)
+    "bear-snapshot.jpg"
+  end
+
   def get_bear_coordinates() do
     #    this will take one second to finish
     caller_pid = self()
@@ -45,15 +51,17 @@ defmodule Barebones.BearData do
 #    coord2 = receive do {:result, coord} -> coord end
 #    coord3 = receive do {:result, coord} -> coord end
 
-    Fetcher.async(fn -> get_single_bear_coordinates() end)
-    Fetcher.async(fn -> get_single_bear_coordinates() end)
-    Fetcher.async(fn -> get_single_bear_coordinates() end)
+    pid1 = Fetcher.async(fn -> get_single_bear_coordinates() end)
+    pid2 = Fetcher.async(fn -> get_single_bear_coordinates() end)
+    pid3 = Fetcher.async(fn -> get_single_bear_coordinates() end)
+    pid4 = Fetcher.async(fn -> get_bear_snapshot() end)
 
-    coord1 = Fetcher.get_result()
-    coord2 = Fetcher.get_result()
-    coord3 = Fetcher.get_result()
+    coord1 = Fetcher.get_result(pid1)
+    coord2 = Fetcher.get_result(pid2)
+    coord3 = Fetcher.get_result(pid3)
+    snapshot = Fetcher.get_result(pid4)
 
-    inspect [coord1, coord2, coord3]
+    inspect [coord1, coord2, coord3, {"snapshot -> ", snapshot}]
   end
 
   def get_bear_coordinates_serially() do
