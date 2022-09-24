@@ -4,24 +4,25 @@ defmodule Barebones.Pledges.PledgeServer do
   first, we will have to start the `listen_loop` server process, and note its pid. That pid will then be used inside `create_pledge` function. `create_pledge` function will send a message to `listen_loop` server process with the name and amount. Inside `listen_loop`, we will store the incoming pledge data in a in memory state.
   for getting the recent pledges, we will again call the `listen_loop` server process from inside the `get_recent_pledges` client process. The pid that we noted will be used to send the message.
   """
+  @process_name :pledge_server
 
-  def create_pledge(pid, name, amount) do
+  def start() do
+    IO.puts "Starting the pledge server"
+    spawn(fn -> listen_loop([]) end) |> Process.register(@process_name)
+  end
+
+  def create_pledge(name, amount) do
     # this part will run in a client process
-    send pid, {self(), :create_pledge, {name, amount}}
+    send @process_name, {self(), :create_pledge, {name, amount}}
 
     receive do {:response, id} -> id end
   end
 
-  def get_recent_pledges(pid) do
-    send pid, {self(), :recent_pledges}
+  def get_recent_pledges() do
+    send @process_name, {self(), :recent_pledges}
 
     receive do {:response, pledges} -> pledges end
     # note that receive is a blocking call
-  end
-
-  def start() do
-    IO.puts "Starting the pledge server"
-    pid = spawn(fn -> listen_loop([]) end)
   end
 
   defp listen_loop(state) do
