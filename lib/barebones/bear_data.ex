@@ -2,6 +2,7 @@ defmodule Barebones.BearData do
   @moduledoc "module for handling the data for Bears"
 
   alias Barebones.Bear
+  alias Barebones.Fetcher
 
   def list_bears do
     [
@@ -36,22 +37,30 @@ defmodule Barebones.BearData do
     #    this will take one second to finish
     caller_pid = self()
 
-    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
-    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
-    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+#    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+#    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+#    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+#
+#    coord1 = receive do {:result, coord} -> coord end
+#    coord2 = receive do {:result, coord} -> coord end
+#    coord3 = receive do {:result, coord} -> coord end
 
-    coord1 = receive do {:result, coord} -> coord end
-    coord2 = receive do {:result, coord} -> coord end
-    coord3 = receive do {:result, coord} -> coord end
+    Fetcher.async(fn -> get_single_bear_coordinates() end)
+    Fetcher.async(fn -> get_single_bear_coordinates() end)
+    Fetcher.async(fn -> get_single_bear_coordinates() end)
+
+    coord1 = Fetcher.get_result()
+    coord2 = Fetcher.get_result()
+    coord3 = Fetcher.get_result()
 
     inspect [coord1, coord2, coord3]
   end
 
   def get_bear_coordinates_serially() do
     #    this will take three seconds to finish
-    coord1 = Barebones.BearData.get_single_bear_coordinates()
-    coord2 = Barebones.BearData.get_single_bear_coordinates()
-    coord3 = Barebones.BearData.get_single_bear_coordinates()
+    coord1 = get_single_bear_coordinates()
+    coord2 = get_single_bear_coordinates()
+    coord3 = get_single_bear_coordinates()
 
     inspect [coord1, coord2, coord3]
   end
