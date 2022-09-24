@@ -5,6 +5,7 @@ defmodule Barebones.Handler do
   import Barebones.Parser, only: [parse: 1]
   alias Barebones.RequestMap
   alias Barebones.BearController
+  alias Barebones.Pledges.PledgeController
 
   @doc "main handler function"
   def handler(request) do
@@ -64,6 +65,14 @@ defmodule Barebones.Handler do
   def route(requestMap, "GET", "/bear-coordinates") do
 
     %RequestMap{requestMap | resp_body: Barebones.BearData.get_bear_coordinates(), status: 200}
+  end
+
+  def route(requestMap, "GET", "/pledges") do
+    PledgeController.get(requestMap)
+  end
+
+  def route(requestMap, "POST", "/pledges") do
+    PledgeController.create(requestMap)
   end
 
   def route(requestMap, _method, path) do
