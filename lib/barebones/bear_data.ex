@@ -27,9 +27,33 @@ defmodule Barebones.BearData do
   end
 
   # function that waits 1 second and replies with a random number
-  def get_bear_coordinates() do
+  def get_single_bear_coordinates() do
     :timer.sleep(1000)
-    System.unique_integer([:positive]) |> Integer.to_string
+    System.unique_integer([:positive])
+  end
+
+  def get_bear_coordinates() do
+    #    this will take one second to finish
+    caller_pid = self()
+
+    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+    spawn(fn -> send(caller_pid, {:result, get_single_bear_coordinates()}) end)
+
+    coord1 = receive do {:result, coord} -> coord end
+    coord2 = receive do {:result, coord} -> coord end
+    coord3 = receive do {:result, coord} -> coord end
+
+    inspect [coord1, coord2, coord3]
+  end
+
+  def get_bear_coordinates_serially() do
+    #    this will take three seconds to finish
+    coord1 = Barebones.BearData.get_single_bear_coordinates()
+    coord2 = Barebones.BearData.get_single_bear_coordinates()
+    coord3 = Barebones.BearData.get_single_bear_coordinates()
+
+    inspect [coord1, coord2, coord3]
   end
   
 end
