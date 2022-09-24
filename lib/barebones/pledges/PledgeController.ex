@@ -5,7 +5,7 @@ defmodule Barebones.Pledges.PledgeController do
   def create(requestMap) do
     %{"name" => name, "amount" => amount} = requestMap.params
 
-    PledgeServer.create_pledge(name, String.to_integer(amount))
+    PledgeServer.create_pledge(self(), name, String.to_integer(amount))
 
     %RequestMap{requestMap | resp_body: "#{name} pledged #{amount}" , status: 200}
   end
