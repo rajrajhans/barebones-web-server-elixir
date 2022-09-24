@@ -51,11 +51,13 @@ defmodule Barebones.BearData do
 #    coord2 = receive do {:result, coord} -> coord end
 #    coord3 = receive do {:result, coord} -> coord end
 
+    pid1 = Fetcher.async(fn -> get_bear_snapshot() end)
+
     coords = ["1", "2", "3"]
              |> Enum.map(fn _ -> Fetcher.async(fn -> get_single_bear_coordinates() end) end)
              |> Enum.map(&Fetcher.get_result/1)
 
-    snapshot = Fetcher.async(fn -> get_bear_snapshot() end) |> Fetcher.get_result
+    snapshot = Fetcher.get_result(pid1)
 
     inspect {coords, snapshot}
   end
