@@ -2,7 +2,6 @@ defmodule Barebones.BearData do
   @moduledoc "module for handling the data for Bears"
 
   alias Barebones.Bear
-  alias Barebones.Fetcher
 
   def list_bears do
     [
@@ -51,13 +50,15 @@ defmodule Barebones.BearData do
 #    coord2 = receive do {:result, coord} -> coord end
 #    coord3 = receive do {:result, coord} -> coord end
 
-    pid1 = Fetcher.async(fn -> get_bear_snapshot() end)
+    task = Task.async(fn -> get_bear_snapshot() end)
 
     coords = ["1", "2", "3"]
-             |> Enum.map(fn _ -> Fetcher.async(fn -> get_single_bear_coordinates() end) end)
-             |> Enum.map(&Fetcher.get_result/1)
+             |> Enum.map(fn _ -> Task.async(fn -> get_single_bear_coordinates() end) end)
+             |> Enum.map(&Task.await/1)
 
-    snapshot = Fetcher.get_result(pid1)
+    IO.inspect coords
+
+    snapshot = Task.await(task)
 
     inspect {coords, snapshot}
   end
