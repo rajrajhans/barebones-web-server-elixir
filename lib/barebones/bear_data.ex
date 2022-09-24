@@ -25,5 +25,11 @@ defmodule Barebones.BearData do
   def find_bear(id) when is_binary(id) do
     id |> String.to_integer |> find_bear
   end
+
+  # function that waits 1 second and replies with a random number
+  def get_bear_coordinates() do
+    :timer.sleep(1000)
+    System.unique_integer([:positive]) |> Integer.to_string
+  end
   
 end

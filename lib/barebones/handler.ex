@@ -56,6 +56,30 @@ defmodule Barebones.Handler do
     end
   end
 
+  def route(requestMap, "GET", "/hibernate/" <> time) do
+    time |> String.to_integer |> :timer.sleep
+    %RequestMap{requestMap | resp_body: "Awake", status: 200}
+  end
+
+  def route(requestMap, "GET", "/bear-coordinates") do
+#    this will take three seconds to finish
+#    coord1 = Barebones.BearData.get_bear_coordinates()
+#    coord2 = Barebones.BearData.get_bear_coordinates()
+#    coord3 = Barebones.BearData.get_bear_coordinates()
+
+    caller_pid = self()
+
+    pid1 = spawn(fn -> send(caller_pid, {:result, Barebones.BearData.get_bear_coordinates()}) end)
+    pid2 = spawn(fn -> send(caller_pid, {:result, Barebones.BearData.get_bear_coordinates()}) end)
+    pid3 = spawn(fn -> send(caller_pid, {:result, Barebones.BearData.get_bear_coordinates()}) end)
+
+    coord1 = receive do {:result, coord} -> coord end
+    coord2 = receive do {:result, coord} -> coord end
+    coord3 = receive do {:result, coord} -> coord end
+
+    %RequestMap{requestMap | resp_body: "#{coord1} #{coord2} #{coord3}", status: 200}
+  end
+
   def route(requestMap, _method, path) do
     %RequestMap{requestMap | resp_body: "404: #{path} Not found", status: 404}
   end
