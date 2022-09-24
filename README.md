@@ -14,6 +14,8 @@ This toy web server covers:
 4. Running code as separate processes asynchronously, implementing the actor model of concurrency of Elixir.
    Communicating between
    processes via messages. Holding state in processes.
+    - (Check out
+      the [pledges problem statement](lib/barebones/pledges/README.md) for an example of holding state in processes)
 
 ## Want to learn elixir?
 
