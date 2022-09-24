@@ -9,4 +9,4 @@
 
 ![](diagram.png)
 
-For the implementation of this, check [PledgeServer.ex](PledgeServer.ex)
+For the implementation of this, check [PledgeServer.ex](pledge_server.ex)
