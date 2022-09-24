@@ -13,7 +13,8 @@ This toy web server covers:
 3. Writing unit tests, doc tests in elixir.
 4. Running code as separate processes asynchronously, implementing the actor model of concurrency of Elixir.
    Communicating between
-   processes via messages. Holding state in processes.
+   processes via messages.
+5. Holding state in processes via GenServer and also an implementation of GenServer concept using low level processes.
     - (Check out
       the [pledges problem statement](lib/barebones/pledges/README.md) for an example of holding state in processes)
 
