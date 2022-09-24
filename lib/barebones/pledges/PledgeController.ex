@@ -12,6 +12,7 @@ defmodule Barebones.Pledges.PledgeController do
 
   def get(requestMap) do
     recent_pledges = PledgeServer.get_recent_pledges()
-    %RequestMap{requestMap | resp_body: "last three pledges here" , status: 200}
+    res = inspect recent_pledges
+    %RequestMap{requestMap | resp_body: res, status: 200}
   end
 end
