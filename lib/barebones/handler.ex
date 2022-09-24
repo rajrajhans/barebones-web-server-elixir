@@ -75,6 +75,10 @@ defmodule Barebones.Handler do
     PledgeController.create(requestMap)
   end
 
+  def route(requestMap, "GET", "/total_pledged") do
+    PledgeController.total(requestMap)
+  end
+
   def route(requestMap, _method, path) do
     %RequestMap{requestMap | resp_body: "404: #{path} Not found", status: 404}
   end

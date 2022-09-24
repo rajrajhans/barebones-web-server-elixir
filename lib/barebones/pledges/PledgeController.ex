@@ -15,4 +15,9 @@ defmodule Barebones.Pledges.PledgeController do
     res = inspect recent_pledges
     %RequestMap{requestMap | resp_body: res, status: 200}
   end
+
+  def total(requestMap) do
+    total = PledgeServer.total_pledged()
+    %RequestMap{requestMap | resp_body: "Total ${total} pledged so far!", status: 200}
+  end
 end

@@ -25,6 +25,12 @@ defmodule Barebones.Pledges.PledgeServer do
     # note that receive is a blocking call
   end
 
+  def total_pledged() do
+    send @process_name, {self(), :total_pledged}
+
+    receive do {:response, total} -> total end
+  end
+
   defp listen_loop(state) do
     # this part will run in a server process
 
@@ -38,6 +44,11 @@ defmodule Barebones.Pledges.PledgeServer do
 
       {sender, :recent_pledges} ->
         send sender, {:response, state}
+        listen_loop(state)
+
+      {sender, :total_pledged} ->
+        total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
+        send sender, {:response, total}
         listen_loop(state)
     end
   end
