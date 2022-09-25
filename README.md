@@ -17,6 +17,9 @@ This toy web server covers:
 5. Holding state in processes via GenServer and also an implementation of GenServer concept using low level processes.
     - (Check out
       the [pledges problem statement](lib/barebones/pledges/README.md) for an example of holding state in processes)
+6. Making Genserver and non genserver processes fault tolerant.
+    - Fault recovery implementation for a non genserver
+      process: [http_server_kickstarter.ex](lib/barebones/http_server_kickstarter.ex)
 
 ## Want to learn elixir?
 
