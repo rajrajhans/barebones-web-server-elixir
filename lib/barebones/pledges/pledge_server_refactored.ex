@@ -1,3 +1,6 @@
+# refactored version of `pledge_server.ex` to separate the code that is generic and can be reused into
+# a separate module called `GenericServer`.
+
 defmodule Barebones.Pledges.GenericServer do
   # after this refactoring, this GenericServer module encapsulates all the generic code that's common to
   # all server processes. It relies on callback module to implement the application specific code in the

@@ -12,5 +12,5 @@
 - For the low level process based implementation of this, check [pledge_server.ex](pledge_server.ex).
 - Refactored version of the same that makes it more generic and similar to GenServer,
   check [pledge_server_refactored.ex](pledge_server_refactored.ex).
-- Finally, check [pledge_server_using_genserve.ex](pledge_server_using_genserve.ex) for implementing this with
+- Finally, check [pledge_server_using_genserve.ex](pledge_server_using_genserver.ex) for implementing this with
   GenServer.
