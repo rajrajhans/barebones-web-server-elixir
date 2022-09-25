@@ -1,6 +1,10 @@
 defmodule Barebones.Pledges.GenericServer do
-  def start(initial_state, process_name) do
-    spawn(fn -> listen_loop(initial_state) end) |> Process.register(process_name)
+  # after this refactoring, this GenericServer module encapsulates all the generic code that's common to
+  # all server processes. It relies on callback module to implement the application specific code in the
+  # functions handle_call and handle_cast.
+
+  def start(callback_module, initial_state, process_name) do
+    spawn(fn -> listen_loop(initial_state, callback_module) end) |> Process.register(process_name)
   end
 
   def call(pid, message) do
@@ -15,20 +19,20 @@ defmodule Barebones.Pledges.GenericServer do
     send pid, {:cast, message}
   end
 
-  defp listen_loop(state) do
+  def listen_loop(state, callback_module) do
     # this part will run in a server process
     receive do
       {:call, sender, message} when is_pid(sender) ->
-        {response, new_state} = Barebones.Pledges.PledgeServerRefactored.handle_call(message, state)
+        {response, new_state} = callback_module.handle_call(message, state)
         send sender, {:response, response}
-        listen_loop(new_state)
+        listen_loop(new_state, callback_module)
       {:cast, message} ->
         # here, we dont need to respond to the client because it doesnt expect a response
-        new_state = Barebones.Pledges.PledgeServerRefactored.handle_cast(message, state)
-        listen_loop(new_state)
+        new_state = callback_module.handle_cast(message, state)
+        listen_loop(new_state, callback_module)
       unexpected ->
         IO.puts "Unexpected message: #{inspect unexpected}"
-        listen_loop(state)
+        listen_loop(state, callback_module)
     end
   end
 end
@@ -39,7 +43,7 @@ defmodule Barebones.Pledges.PledgeServerRefactored do
 
   def start do
     IO.puts "starting pledge server"
-    GenericServer.start([], @process_name)
+    GenericServer.start(__MODULE__, [], @process_name)
   end
 
   def create_pledge(name, amount) do
@@ -58,7 +62,10 @@ defmodule Barebones.Pledges.PledgeServerRefactored do
     GenericServer.cast @process_name, :clear
   end
 
+  # server callbacks
+
   def handle_call(:total_pledged, state) do
+    IO.puts "recieved in handle call"
     total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
     {total, state}
   end
