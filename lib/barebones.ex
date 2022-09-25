@@ -1,10 +1,7 @@
-defmodule Main do
-  def hello(name) do
-    "Howdy, #{name}!"
-  end
-  def hello() do
-    "yo wazzzupp"
+defmodule Barebones do
+  use Application
+
+  def start(_type, _args) do
+    Barebones.TopSupervisor.start_link()
   end
 end
-
-IO.puts Main.hello("Elixirr")

@@ -26,9 +26,10 @@ defmodule Barebones.HttpServerKickStarter do
 
   def start_http_server do
     IO.puts "Starting the http server..."
+    port = Application.get_env(:barebones, :port)
 
     # linking the kickstarter process and http server process
-    server_pid = spawn_link(fn -> Barebones.HttpServer.start(1232) end)
+    server_pid = spawn_link(fn -> Barebones.HttpServer.start(port) end)
     Process.register(server_pid, :http_server)
     server_pid
   end
