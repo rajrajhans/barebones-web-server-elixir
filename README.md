@@ -20,6 +20,7 @@ This toy web server covers:
 6. Making Genserver and non genserver processes fault tolerant.
     - Fault recovery implementation for a non genserver
       process: [http_server_kickstarter.ex](lib/barebones/http_server_kickstarter.ex)
+    - Fault recovery using OTP Supervisor: [services_supervisor.ex](lib/barebones/services_supervisor.ex)
 
 ## Want to learn elixir?
 

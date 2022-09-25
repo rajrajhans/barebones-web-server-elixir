@@ -8,6 +8,12 @@ defmodule Barebones.Pledges.PledgeServerUsingGenServer do
     GenServer.start(__MODULE__, [], name: @process_name)
   end
 
+  # for supervisor
+  def start_link(_arg) do
+    IO.puts "starting pledge server"
+    GenServer.start_link(__MODULE__, [], name: @process_name)
+  end
+
   def create_pledge(name, amount) do
     GenServer.call @process_name, {:create_pledge, {name, amount}}
   end
